@@ -45,7 +45,7 @@ namespace CookieSampleMVC.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Login([Bind("Email,Password,RedirectUrl")] InputModel model)
+        public ActionResult Login([Bind("Email,Password,ReturnUrl")] InputModel model)
         {
             if (ModelState.IsValid)
             {
@@ -80,7 +80,7 @@ namespace CookieSampleMVC.Controllers
                     //AllowRefresh = true,
                     // Refreshing the authentication session should be allowed.
 
-                    //ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(10),
+                    //ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(2),
                     // The time at which the authentication ticket expires. A 
                     // value set here overrides the ExpireTimeSpan option of 
                     // CookieAuthenticationOptions set with AddCookie.
@@ -94,7 +94,7 @@ namespace CookieSampleMVC.Controllers
                     //IssuedUtc = <DateTimeOffset>,
                     // The time at which the authentication ticket was issued.
 
-                    //RedirectUri = <string>
+                    //RedirectUri = model.ReturnUrl
                     // The full path or absolute URI to be used as an http 
                     // redirect response value.
                 };
@@ -106,7 +106,6 @@ namespace CookieSampleMVC.Controllers
                 #endregion
             }
 
-            //return LocalRedirect(Url.GetLocalUrl(returnUrl));
             return LocalRedirect(model.ReturnUrl ?? "/");
         }
 
@@ -120,7 +119,6 @@ namespace CookieSampleMVC.Controllers
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             #endregion
 
-            //return RedirectToPage("/Account/SignedOut");
             return RedirectToAction("SignedOut");
         }
 
